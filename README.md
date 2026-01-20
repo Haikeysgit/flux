@@ -6,7 +6,7 @@ Solana accounts are not free. They cost "Rent" (storage fees). When you abandon 
 
 Think of it like Tupperware.
 
-When you open a Solana account, you're essentially buying a container to hold your data. You pay a deposit (rent) to reserve that space. When the data inside is no longer needed—the account goes idle—you *should* return the container and get your deposit back.
+When you open a Solana account, you're essentially buying a container to hold your data. You pay a deposit (rent) to reserve that space. When the data inside is no longer needed the account goes idle you *should* return the container and get your deposit back.
 
 Most people forget. The containers pile up. The SOL stays locked.
 
