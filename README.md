@@ -54,19 +54,7 @@ Flux monitors all accounts sponsored by a Kora operator and:
 2. **Judges** each account (is it safe to close?)
 3. **Reclaims** the rent when safe, returning SOL to the operator
 
-```mermaid
-graph LR
-    A[Kora Operator] -->|Pays Rent| B[New Account]
-    B -->|Account Goes Idle| C[Idle Account]
-    C -->|Flux Scans & Closes| D[Rent Returned to Operator]
-    
-    style A fill:#22c55e,stroke:#16a34a,color:#000
-    style B fill:#3b82f6,stroke:#2563eb,color:#fff
-    style C fill:#f59e0b,stroke:#d97706,color:#000
-    style D fill:#22c55e,stroke:#16a34a,color:#000
-```
 
----
 
 ## The Solution
 
@@ -88,25 +76,25 @@ This table shows how Flux meets the hackathon requirements.
 
 | Requirement | Status | How We Handle It |
 |-------------|--------|------------------|
-| Never close accounts with active data | ✅ Done | `judge.ts` checks lamports = 0 and data is empty before approval |
-| Simulation mode for safe testing | ✅ Done | Toggle in settings enables "dry run" - logs what would happen without doing it |
-| Clear logging of all actions | ✅ Done | Every scan, judgment, and reclaim is stored in the database with timestamps |
+| Never close accounts with active data | Done | `judge.ts` checks lamports = 0 and data is empty before approval |
+| Simulation mode for safe testing | Done | Toggle in settings enables "dry run" - logs what would happen without doing it |
+| Clear logging of all actions | Done | Every scan, judgment, and reclaim is stored in the database with timestamps |
 
 ### User Experience
 
 | Requirement | Status | How We Handle It |
 |-------------|--------|------------------|
-| Works without wallet setup | ✅ Done | Mock Mode loads demo data automatically |
-| One-command startup | ✅ Done | `npm run dev` handles database setup and starts the app |
-| Clean, readable interface | ✅ Done | Dark mode dashboard shows stats, accounts, and activity logs |
+| Works without wallet setup |  Done | Mock Mode loads demo data automatically |
+| One-command startup |  Done | `npm run dev` handles database setup and starts the app |
+| Clean, readable interface |  Done | Dark mode dashboard shows stats, accounts, and activity logs |
 
 ### Technical
 
 | Requirement | Status | How We Handle It |
 |-------------|--------|------------------|
-| Devnet compatible | ✅ Done | Default RPC is Solana Devnet |
-| Mainnet ready | ✅ Done | Just change `SOLANA_RPC_URL` in `.env` to go live |
-| Persistent storage | ✅ Done | SQLite via Prisma stores all accounts and logs locally |
+| Devnet compatible |  Done | Default RPC is Solana Devnet |
+| Mainnet ready |  Done | Just change `SOLANA_RPC_URL` in `.env` to go live |
+| Persistent storage |  Done | SQLite via Prisma stores all accounts and logs locally |
 
 ---
 
@@ -218,33 +206,6 @@ npm run dev
 - **Backend:** Next.js API Routes
 - **Database:** SQLite + Prisma ORM
 - **Blockchain:** Solana Web3.js
-
----
-
-## Project Structure
-
-```
-flux/
-├── src/
-│   ├── app/              # Next.js pages and API routes
-│   │   ├── api/          # Backend endpoints
-│   │   │   ├── scan/     # Trigger account scanning
-│   │   │   ├── reclaim/  # Execute rent reclamation
-│   │   │   ├── accounts/ # Fetch stored accounts
-│   │   │   ├── logs/     # Fetch activity logs
-│   │   │   ├── stats/    # Get dashboard statistics
-│   │   │   └── settings/ # Manage app settings
-│   │   └── page.tsx      # Main dashboard
-│   ├── components/       # React components
-│   └── lib/              # Core modules
-│       ├── scanner.ts    # Account discovery
-│       ├── judge.ts      # Safety verification
-│       └── executioner.ts # Rent reclamation
-├── prisma/
-│   ├── schema.prisma     # Database schema
-│   └── seed.ts           # Demo data for Mock Mode
-└── .env.example          # Configuration template
-```
 
 ---
 
