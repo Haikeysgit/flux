@@ -1,0 +1,84 @@
+// Flux (Kora Rent Guardian) - Database Schema
+// This schema defines the core data models for tracking sponsored accounts,
+// activity logs, operator settings, and protected addresses.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Represents a Solana account that was sponsored (rent-paid) by the Kora operator.
+/// The bot monitors these accounts to determine if rent can be safely reclaimed.
+model SponsoredAccount {
+  /// The Solana public key address (base58 encoded)
+  address       String   @id
+  
+  /// Current SOL balance of the account (in SOL, not lamports)
+  balance       Float
+  
+  /// Minimum SOL required to remain rent-exempt
+  rentExemptMin Float
+  
+  /// Timestamp of the last detected on-chain activity
+  lastActivity  DateTime
+  
+  /// Current status: ACTIVE, ELIGIBLE, RECLAIMED, or PROTECTED
+  /// - ACTIVE: Account is in use, do not reclaim
+  /// - ELIGIBLE: Safe to reclaim rent
+  /// - RECLAIMED: Rent has been successfully reclaimed
+  /// - PROTECTED: Operator has whitelisted this account
+  status        String
+  
+  /// When this account was first detected by the scanner
+  detectedAt    DateTime @default(now())
+}
+
+/// Audit trail of all actions taken by the bot.
+/// This provides clarity and transparency for operators.
+model ActivityLog {
+  id          Int      @id @default(autoincrement())
+  
+  /// When the action occurred
+  timestamp   DateTime @default(now())
+  
+  /// Type of action: SCAN, RECLAIM, or SKIP
+  action      String
+  
+  /// The target account address (if applicable)
+  account     String
+  
+  /// SOL amount involved (balance reclaimed or skipped)
+  amount      Float
+  
+  /// Execution mode: REAL (actual transaction) or SIMULATION (dry run)
+  mode        String
+  
+  /// Transaction signature (only populated for REAL mode reclaims)
+  txSignature String?
+  
+  /// Human-readable reason for the action (especially for SKIPs)
+  reason      String?
+}
+
+/// Operator-configurable settings for the bot behavior.
+model Settings {
+  /// Setting key (e.g., "min_age_days", "dry_run_mode")
+  key   String @id
+  
+  /// Setting value (stored as string, parsed as needed)
+  value String
+}
+
+/// Accounts that the operator has explicitly protected from reclamation.
+/// These accounts will always be skipped by the Judge module.
+model Whitelist {
+  /// The protected account address
+  address String @id
+  
+  /// Optional note explaining why this account is protected
+  note    String?
+}
