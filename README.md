@@ -1,5 +1,10 @@
 # Flux: Kora Rent Guardian
 
+<div align="center">
+  <img src="./public/demo.png" alt="Flux Dashboard Preview" width="100%" />
+</div>
+<br />
+
 ## The Problem
 
 Solana accounts are not free. They cost "Rent" (storage fees). When you abandon an account, that SOL is locked forever.
